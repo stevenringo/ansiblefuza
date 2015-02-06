@@ -2,11 +2,29 @@
 
 - hosts: railsapp
   remote_user: vagrant
+  sudo: yes
   tasks:
     - name: install nginx
-      apt: name=nginx state=present update_cache=yes cache_valid_time=3600
-      sudo: yes
+      apt: name=nginx state=present update_cache=yes cache_valid_time=86400
 
     - name: start nginx
       service: name=nginx state=started
-      sudo: yes
+
+    - name: add brightbox ruby repository
+      apt_repository:
+        repo: ppa:brightbox/ruby-ng
+        state: present
+
+    - name: install ruby
+      apt:
+        name: "{{ item }}"
+      with_items:
+        - ruby2.1
+        - ruby2.1-dev
+        - ruby-switch
+
+    - name: install bundler gem
+      gem:
+        name: bundler
+        state: present
+        user_install: no
