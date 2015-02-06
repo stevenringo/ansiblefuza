@@ -3,6 +3,8 @@
 - hosts: railsapp
   remote_user: vagrant
   sudo: yes
+  vars:
+    deploy_user: deploy
   tasks:
     - name: install nginx
       apt: name=nginx state=present update_cache=yes cache_valid_time=86400
@@ -28,6 +30,16 @@
         name: bundler
         state: present
         user_install: no
+
+    - name: add account group
+      group:
+        name: "{{ deploy_user }}"
+
+    - name: add account user
+      user:
+        name: "{{ deploy_user }}"
+        group: "{{ deploy_user }}"
+
     - name: install git
       apt:
         name: git
