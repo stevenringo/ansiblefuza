@@ -54,6 +54,8 @@
         - libtool
         - python-httplib2
         - ntp
+        - sqlite3
+        - libsqlite3-dev
 
     - name: fetch source code from git
       sudo_user: "{{ deploy_user }}"
