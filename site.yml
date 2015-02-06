@@ -10,8 +10,12 @@
     db_username: railsfuza
     db_password: i_@m_a_s3kr1t
   tasks:
+
+    - name: update apt cache
+      apt: update_cache=yes
+
     - name: install nginx
-      apt: name=nginx state=present update_cache=yes cache_valid_time=86400
+      apt: name=nginx state=present
 
     - name: start nginx
       service: name=nginx state=started
@@ -104,3 +108,44 @@
       environment:
         RAILS_ENV: "{{ rails_env }}"
       tags: deploy
+
+    - name: write unicorn init file
+      template: src=templates/unicorn.init.j2 dest=/etc/init.d/railsfuza owner={{ deploy_user }} group={{ deploy_user }} mode=0755
+      notify: restart unicorn
+      tags: deploy
+
+    - name: write unicorn config file
+      template: src=templates/unicorn.rb.j2 dest={{ release_path }}/config/unicorn.rb owner={{ deploy_user }} group={{ deploy_user }} mode=0755
+      notify: restart unicorn
+      tags: deploy
+
+    - name: delete default vhost symlink
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: restart nginx
+      tags: deploy
+
+    - name: write nginx config file
+      template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf mode=0755
+      notify: restart nginx
+      tags: deploy
+
+    - name: start unicorn
+      service:
+        name: railsfuza
+        pattern: "unicorn master"
+        state: started
+      tags: deploy
+
+  handlers:
+    - name: restart unicorn
+      service:
+        name: railsfuza
+        pattern: "unicorn master"
+        state: restarted
+
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
