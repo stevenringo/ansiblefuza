@@ -71,3 +71,10 @@
       environment:
         RAILS_ENV: "{{ rails_env }}"
       tags: deploy
+
+    - name: "rake db:migrate"
+      sudo_user: "{{ deploy_user }}"
+      command: bundle exec rake db:migrate chdir={{ release_path }}
+      environment:
+        RAILS_ENV: production
+      tags: deploy
