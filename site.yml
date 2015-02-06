@@ -42,7 +42,7 @@
       apt_key: url='https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
 
     - name: install nodejs
-      apt: name=nodejs state=present update_cache=yes cache_valid_time=86400
+      apt: name=nodejs state=present update_cache=yes
 
     - name: add account group
       group:
