@@ -1,0 +1,7 @@
+---
+
+- hosts: railsapp
+  remote_user: vagrant
+  tasks:
+    - name: hello world
+      command: echo "Hello, World!"
