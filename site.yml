@@ -28,3 +28,7 @@
         name: bundler
         state: present
         user_install: no
+    - name: install git
+      apt:
+        name: git
+
