@@ -33,6 +33,15 @@
         state: present
         user_install: no
 
+    - name: add nodejs apt repository
+      apt_repository: repo='deb https://deb.nodesource.com/node precise main'
+
+    - name: add nodejs signing key
+      apt_key: url='https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+
+    - name: install nodejs
+      apt: name=nodejs state=present update_cache=yes cache_valid_time=86400
+
     - name: add account group
       group:
         name: "{{ deploy_user }}"
