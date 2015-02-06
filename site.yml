@@ -5,6 +5,8 @@
   sudo: yes
   vars:
     deploy_user: deploy
+    release_path: /home/{{ deploy_user }}/railsfuza
+    rails_env: production
   tasks:
     - name: install nginx
       apt: name=nginx state=present update_cache=yes cache_valid_time=86400
@@ -48,6 +50,13 @@
       sudo_user: "{{ deploy_user }}"
       git:
         repo: https://github.com/stevenringo/railsfuza.git
-        dest: /home/{{ deploy_user }}/railsfuza
+        dest: "{{ release_path }}"
         version: master
+      tags: deploy
+
+    - name: bundle install
+      sudo_user: "{{ deploy_user }}"
+      command: bundle install --deployment chdir={{ release_path }}
+      environment:
+        RAILS_ENV: "{{ rails_env }}"
       tags: deploy
