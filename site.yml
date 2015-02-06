@@ -44,3 +44,10 @@
       apt:
         name: git
 
+    - name: fetch source code from git
+      sudo_user: "{{ deploy_user }}"
+      git:
+        repo: https://github.com/stevenringo/railsfuza.git
+        dest: /home/{{ deploy_user }}/railsfuza
+        version: master
+      tags: deploy
