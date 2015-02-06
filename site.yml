@@ -42,9 +42,18 @@
         name: "{{ deploy_user }}"
         group: "{{ deploy_user }}"
 
-    - name: install git
-      apt:
-        name: git
+    - name: install essential build/dev tools and compilers
+      apt: name={{ item }}
+      with_items:
+        - build-essential
+        - automake
+        - autoconf
+        - g++
+        - git
+        - libssl-dev
+        - libtool
+        - python-httplib2
+        - ntp
 
     - name: fetch source code from git
       sudo_user: "{{ deploy_user }}"
