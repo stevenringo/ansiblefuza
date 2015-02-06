@@ -1,0 +1,9 @@
+production:
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+  database: db/production.sqlite3
+  username: {{ db_username }}
+  password: {{ db_password }}
+
+# Warning! Don't use SQLite in production.
