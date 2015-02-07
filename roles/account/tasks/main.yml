@@ -1,0 +1,10 @@
+---
+
+- name: add account group
+  group:
+    name: "{{ account_user }}"
+
+- name: add account user
+  user:
+    name: "{{ account_user }}"
+    group: "{{ account_user }}"

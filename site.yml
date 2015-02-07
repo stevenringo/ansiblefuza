@@ -9,16 +9,12 @@
     rails_env: production
     db_username: railsfuza
     db_password: i_@m_a_s3kr1t
+
+  roles:
+    - { role: account, account_user: "{{ deploy_user }}" }
+    - nginx
+
   tasks:
-
-    - name: update apt cache
-      apt: update_cache=yes
-
-    - name: install nginx
-      apt: name=nginx state=present
-
-    - name: start nginx
-      service: name=nginx state=started
 
     - name: add brightbox ruby repository
       apt_repository:
@@ -47,15 +43,6 @@
 
     - name: install nodejs
       apt: name=nodejs state=present update_cache=yes
-
-    - name: add account group
-      group:
-        name: "{{ deploy_user }}"
-
-    - name: add account user
-      user:
-        name: "{{ deploy_user }}"
-        group: "{{ deploy_user }}"
 
     - name: install essential build/dev tools and compilers
       apt: name={{ item }}
@@ -143,9 +130,4 @@
       service:
         name: railsfuza
         pattern: "unicorn master"
-        state: restarted
-
-    - name: restart nginx
-      service:
-        name: nginx
         state: restarted
